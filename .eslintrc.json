@@ -1,0 +1,18 @@
+{
+	"env": {
+		"browser": true,
+		"es2017": true,
+		"jquery": true
+	},
+	"extends": ["eslint:recommended", "airbnb-base"],
+	"parserOptions": {
+		"sourceType": "module"
+	},
+	"rules": {
+		"indent": ["error", "tab"],
+		"no-tabs": ["error", { "allowIndentationTabs": true }],
+		"prefer-template": "off",
+		"no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
+		"prefer-destructuring": ["error", { "object": true, "array": false }]
+	}
+}
