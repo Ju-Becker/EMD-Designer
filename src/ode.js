@@ -97,6 +97,19 @@ function ode() {
 			);
 		});
 	// Set starting time
+	// due to perfomance reason need to norm the values
+	let norm = 0;
+	for (let i = 0; i < data[0].length; i++) {
+		norm += data[0][i];
+	}
+	if(norm !==0){
+  	for (let i = 0; i < data.length; i++) {
+  		for (let j = 0; j < data[i].length; j++) {
+  			data[i][j] = data[i][j]/norm;
+  			
+  		}
+		}
+	}
 
 	// Setting x values to just computed y values of the curves
 	for (let i = 0; i < data.length; i++) {
