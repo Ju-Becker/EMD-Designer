@@ -3,6 +3,7 @@ import { init as initi } from './init';
 import events from './events';
 import plotCurves from './plot';
 import fsm from './fsm/FSM'; // Entry point for everything related to the tab "The Model"
+import {inituploadmodel, downloadmodel, downloaddatacsv} from './modelupdownload'; 
 
 function initial() {
 	// initializing all components
@@ -18,28 +19,62 @@ function initClickFunction() {
 		$('#fsmID').show();
 		$('#odeID').show();
 		$('#inID').show();
+		$('#helpID').show();
 		$('#plotID').hide();
 		$('#tab2ID').hide();
 		$('#statesID').hide();
 		$('#ratesID').hide();
 		$('#tab3ID').hide();
 		$('#GraphButtons').hide();
+		$('#downloaduploadID').hide();
 		$('#Simulator').removeClass('active');
 		$('#Designer').addClass('active');
+		$('#UploadDownload').removeClass('active');
 	});
 	$('#Simulator').click(() => {
 		$('#fsmID').hide();
 		$('#odeID').hide();
 		$('#inID').hide();
+		$('#helpID').show();
 		$('#plotID').show();
 		$('#tab2ID').show();
 		$('#GraphButtons').show();
+		$('#downloaduploadID').hide();
 		$('#Simulator').addClass('active');
 		$('#Designer').removeClass('active');
+		$('#UploadDownload').removeClass('active');
 		Object.values(graph.rates).forEach((value) => {
 			value.board.update();
 		});
 		// update rate Board
+	});
+	$('#UploadDownload').click(() => {
+		$('#fsmID').hide();
+		$('#odeID').hide();
+		$('#inID').hide();
+		$('#plotID').hide();
+		$('#tab2ID').hide();
+		$('#statesID').hide();
+		$('#ratesID').hide();
+		$('#tab3ID').hide();
+		$('#GraphButtons').hide();
+		$('#downloaduploadID').show();
+		$('#helpID').hide();
+		$('#Simulator').removeClass('active');
+		$('#Designer').removeClass('active');
+		$('#UploadDownload').addClass('active');
+	});
+	//user upload
+	$('#uploadmodel').change(() => {
+		inituploadmodel();
+	});
+	//user download
+	$('#downloadmodel').click(() => {
+		downloadmodel();
+	});
+	//user download data as csv
+	$('#downloaddatacsv').click(() => {
+		downloaddatacsv();
 	});
 	$('#Rates').click(() => {
 		$('#ratesID').show();
