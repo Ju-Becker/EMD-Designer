@@ -23,6 +23,24 @@ function graphInit() {
 		if (x <=Math.log10(graph.eps)) return 0;
 		return 10 ** x;
 	}
+	// function get the norm
+	function getnorm() {
+		let norm = 0;
+		Object.keys(graph.states).forEach((key) => {
+			norm +=inverseCutOffLog(graph.states[key].point.X());
+		});
+		if(norm === 0){norm = 1;}
+		return norm;
+	}
+	// could not use the getnorm at create since data has not loaded
+	function getnormforcreate() {
+		let norm = 0;
+		for(var key in graph.data.states){
+			norm +=graph.data.states[key].value;
+		}
+		if(norm === 0){norm = 1;}
+		return norm;
+	}
 	// Save Functions
 	// Save will store all data in graph.data
 	graph.saveStates = () => {
@@ -226,7 +244,7 @@ function graphInit() {
 			// Create points on graph.board, displaying inital values
 			graph.states[key].plotPoint = graph.board.create(
 				'glider',
-				[0, inverseCutOffLog(graph.states[key].point.X()), line2],
+				[0, inverseCutOffLog(graph.states[key].point.X())/getnormforcreate(), line2],
 				{
 					color: graph.colors[graph.statesMap[key]],
 					name: '' + graph.data.states[key].name + '(0)',
@@ -267,10 +285,12 @@ function graphInit() {
 						.toExponential(3);
 				}
 				// Adjusting the point on graph.board to new value
-				graph.states[key].plotPoint.setPositionDirectly(JXG.COORDS_BY_USER, [
-					0,
-					graph.yPost(inverseCutOffLog(graph.states[key].point.X())),
-				]);
+				Object.keys(graph.states).forEach((key) => {
+					graph.states[key].plotPoint.setPositionDirectly(JXG.COORDS_BY_USER, [
+						0,
+						graph.yPost(inverseCutOffLog(graph.states[key].point.X())/getnorm()),
+					]);
+				});
 				// Plot curves with new inital values
 				graph.plotCurves();
 			});
@@ -282,10 +302,12 @@ function graphInit() {
 				// chrome triggers focusout when diplay is changed to none
 				if ($('#statesID').css('display') === 'block') {
 					// set value of point on graph.board
-					graph.states[key].plotPoint.setPositionDirectly(JXG.COORDS_BY_USER, [
-						0,
-						graph.yPost(parseFloat($('#text' + key).text())),
-					]);
+					Object.keys(graph.states).forEach((key) => {
+						graph.states[key].plotPoint.setPositionDirectly(JXG.COORDS_BY_USER, [
+							0,
+							graph.yPost(parseFloat($('#text' + key).text())/getnorm()),
+						]);
+					});
 					// adjusting grahical input
 					graph.states[key].board.setBoundingBox([
 						cutOffLog(parseFloat($('#text' + key).text())) - 2,
@@ -404,7 +426,7 @@ function graphInit() {
 									[
 										(bb[2] + bb[0]) / 2.5,
 										(bb[1] + bb[3]) / 2,
-										'<div id="inputID"><p>Enter Value of $t_\\\\infty$</p><br>' +
+										'<div id="inputID"><p>Enter Value of $t$<sub>' + key.substring(1,2) + '</sub></p><br>' +
 											'<input type="float" id="xValue" required value=' +
 											thisTemp.X() +
 											'><br><br>' +
@@ -821,7 +843,7 @@ function initailAxes() {
 	const origPt = graph.board.create('point', [0, 0], { visible: false });
 	graph.upperAxis = 30;
 	graph.lowerAxis = graph.board.canvasHeight - 30;
-	/*graph.board.on('boundingbox', () => {
+	graph.board.on('boundingbox', () => {
 		console.time('Axis');
 		bb = graph.board.getBoundingBox();
 		const mycoordsY = new JXG.Coords(
@@ -875,7 +897,7 @@ function initailAxes() {
 		}
 		setTicks();
 		console.timeEnd('Axis');
-	});*/
+	});
 	graph.boardRestriction = true;
 	graph.yLogFunc = function yLogFunc() {
 		console.time('yLog');
@@ -883,7 +905,7 @@ function initailAxes() {
 			graph.board.setBoundingBox(
 				[
 					-graph.tEnd.X() / 10,
-					10,
+					0.3,
 					1.1 * graph.tEnd.X(),
 					-Math.log10(1 / graph.eps) - 1,
 				],
@@ -942,7 +964,7 @@ function initailAxes() {
 			};
 		} else {
 			graph.board.setBoundingBox(
-				[-graph.tEnd.X() / 10, 1200, 1.1* graph.tEnd.X(), -200], 
+				[-graph.tEnd.X() / 10, 1.2, 1.1* graph.tEnd.X(), -0.1], 
 				false,
 			);
 			yAxTicks.generateLabelText = function (tick, zero) {
@@ -1074,7 +1096,7 @@ function initalBoard() {
 
 	// Create board on which to plot
 	graph.board = JXG.JSXGraph.initBoard('plotID', {
-		boundingbox: [-20, 1200, 220, -200],  
+		boundingbox: [-20, 1.2, 220, -0.1],  
 		axis: false,
 		keepaspectratio: false,
 		showCopyright: false,
