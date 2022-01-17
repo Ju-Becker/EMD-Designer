@@ -53,7 +53,7 @@ function initalTEnd() {
 		color: 'black',
 	});
 	graph.board.setBoundingBox(
-		[-graph.tEnd.X() / 10, 1200, 1.1*graph.tEnd.X(), -200],
+		[-graph.tEnd.X() / 10, 1.2, 1.1*graph.tEnd.X(), -0.1],
 		false,
 	);
 	// Adding onclick event
