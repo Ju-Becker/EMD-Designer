@@ -24,6 +24,7 @@
 				<div class="tab">
 					<button id="Designer">The Model.</button>
 					<button id="Simulator">The Simulation.</button>
+					<button id="UploadDownload">Upload/Download</button>
 					<span id="GraphButtons"></span>
 				</div>
 			</div>
@@ -34,6 +35,14 @@
 					width="2000px"
 					height="2000px"
 				></canvas>
+			</div>
+			<div id="downloaduploadID">
+				<label for="downloadmodel" class="labelclass">Download your current model:</label>
+				<button id="downloadmodel">Download</button>
+				<label for="downloaddatacsv" class="labelclass">Download the model data as CSV:</label>
+				<button id="downloaddatacsv">Download</button>
+				<label for="uploadmodel" class="labelclass">Upload your model:</label>
+				<input type="file" id="uploadmodel">
 			</div>
 			<div id="odeID" class="tabcontent"></div>
 			<div id="inID" class="tabcontent"></div>
